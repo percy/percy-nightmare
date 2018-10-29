@@ -1,5 +1,5 @@
 export function clientInfo(): string {
-  const version = require('../package.json').version
-  const name = require('../package.json').name
+  const version: string = require('../package.json').version
+  const name: string = require('../package.json').name
   return `${name}/${version}`
 }
