@@ -15,16 +15,13 @@ declare var Nightmare: any;
  * @param options Additional options, e.g. '{widths: [300, 600, 1000]}'. Optional.
  */
 export function percySnapshot(name: string, options: any = {}) {
-  const percyClientInfo: string =  clientInfo()
   return function (nightmare: any) {
     nightmare
       .inject('js', 'node_modules/@percy/nightmare/node_modules/@percy/agent/dist/public/percy-agent.js')
-      .evaluate(function (name: string, options: any, percyClientInfo: string) {
+      .evaluate(function (name: string, options: any, clientInfo: string) {
         name = name || document.title
-        const percyAgentClient = new PercyAgent({
-          clientInfo: percyClientInfo
-        })
+        const percyAgentClient = new PercyAgent({clientInfo})
         percyAgentClient.snapshot(name, options)
-      }, name, options, percyClientInfo)
+      }, name, options, clientInfo())
   }
 }
