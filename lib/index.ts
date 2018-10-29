@@ -21,17 +21,8 @@ export function percySnapshot(name: string, options: any = {}) {
       .inject('js', 'node_modules/@percy/nightmare/node_modules/@percy/agent/dist/public/percy-agent.js')
       .evaluate(function (name: string, options: any, percyClientInfo: string) {
         name = name || document.title
-        var nightmareAgent = function() {
-          try {
-              return window.clientInformation.userAgent
-          }
-          catch {
-              return 'unknown'
-          }
-      }
         const percyAgentClient = new PercyAgent({
-          clientInfo: percyClientInfo,
-          environmentInfo: `nightmare/${nightmareAgent()}`
+          clientInfo: percyClientInfo
         })
         percyAgentClient.snapshot(name, options)
       }, name, options, percyClientInfo)
