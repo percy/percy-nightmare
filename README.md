@@ -1,2 +1,3 @@
-# percy-nightmare
-Nightmare client library for visual regression testing with Percy.
+# @percy/nightmare
+Nightmare SDK for visual regression testing with [Percy](https://percy.io).
+
