@@ -1,7 +1,6 @@
 import { clientInfo } from './environment'
 
 declare var PercyAgent: any;
-declare var Nightmare: any;
 
 /**
  * A function to take a Percy snapshot from a NightmareJS test. To use in your tests:
