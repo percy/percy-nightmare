@@ -19,10 +19,18 @@ export function percySnapshot(name: string, options: any = {}) {
   }
   return function (nightmare: any) {
     nightmare
-      .inject('js', 'node_modules/@percy/nightmare/node_modules/@percy/agent/dist/public/percy-agent.js')
+      .inject('js', _agentJsFilepath())
       .evaluate(function (name: string, options: any, clientInfo: string) {
         const percyAgentClient = new PercyAgent({clientInfo})
         percyAgentClient.snapshot(name, options)
       }, name, options, clientInfo())
+  }
+}
+
+function _agentJsFilepath(): string {
+  try {
+    return require.resolve('@percy/agent/dist/public/percy-agent.js')
+  } catch {
+    return 'node_modules/@percy/nightmare/node_modules/@percy/agent/dist/public/percy-agent.js'
   }
 }
