@@ -10,15 +10,17 @@ declare var PercyAgent: any;
  *     .goto(<yourtesturl>)
  *     .use(percySnapshot(<your snapshot name>), <maybe options>))
  *
- * @param name Name of the snapshot that we're taking.
+ * @param name Name of the snapshot that we're taking. Required.
  * @param options Additional options, e.g. '{widths: [300, 600, 1000]}'. Optional.
  */
 export function percySnapshot(name: string, options: any = {}) {
+  if (!name) {
+    throw new Error("'name' must be provided. In Mocha, this.test.fullTitle() is a good default.")
+  }
   return function (nightmare: any) {
     nightmare
       .inject('js', 'node_modules/@percy/nightmare/node_modules/@percy/agent/dist/public/percy-agent.js')
       .evaluate(function (name: string, options: any, clientInfo: string) {
-        name = name || document.title
         const percyAgentClient = new PercyAgent({clientInfo})
         percyAgentClient.snapshot(name, options)
       }, name, options, clientInfo())
