@@ -31,6 +31,6 @@ function _agentJsFilepath(): string {
   try {
     return require.resolve('@percy/agent/dist/public/percy-agent.js')
   } catch {
-    return 'node_modules/@percy/nightmare/node_modules/@percy/agent/dist/public/percy-agent.js'
+    return 'node_modules/@percy/agent/dist/public/percy-agent.js'
   }
 }
