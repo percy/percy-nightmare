@@ -3,7 +3,7 @@ const should = require('chai').should()
 const Nightmare = require('nightmare')
 const { percySnapshot } = require('../dist')
 
-describe('@percy/puppeteer SDK', function() {
+describe('@percy/nightmare SDK', function() {
   this.timeout('10s')
 
   const PORT = 8000
