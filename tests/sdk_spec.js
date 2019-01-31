@@ -86,11 +86,13 @@ describe('@percy/nightmare SDK', function() {
 
   describe('with live sites', function() {
 
-    it('snapshots HTTPS website with no CSP', function(done) {
+    xit('snapshots HTTPS website with no CSP', function(done) {
       nightmare
-        .goto('https://www.google.com/')
+        .goto('https://www.google.com')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
+        .catch(done)
         .then(() => done())
+        //.then(() => done())
     })
 
     // As of December 2018, it doesn't seem possible to bypass CSP in Nightmare.
@@ -113,18 +115,20 @@ describe('@percy/nightmare SDK', function() {
 
     it('csp poc test', function (done) {
       nightmare
-        .goto('https://www.google.com')
+        .goto('https://buildkite.com/')
         .inject('js', agentJsFilename())
         .evaluate(function () {
           const percyAgentClient = new PercyAgent({ handleAgentCommunication: false })
-          return percyAgentClient.snapshot('unused')
+          return { domSnapshot: percyAgentClient.snapshot('unused'), url: document.URL }
         })
-        .then(function (domSnapshot) {
+        .then(function (result) {
+          //console.log('### result: ' + JSON.stringify(result))
+          //console.log('### url:' + result['url'])
           //console.log('#### domSnapshot: ' + domSnapshot)
           return postSnapshot({
             name: 'test poc snapshot name',
-            url: 'https://www.google.com',
-            domSnapshot,
+            url: result['url'],
+            domSnapshot: result['domSnapshot'],
             clientInfo: 'poc-test'
           })
         })

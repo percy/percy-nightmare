@@ -1,5 +1,6 @@
 import { clientInfo } from './environment'
-import { agentJsFilename } from '@percy/agent'
+import { agentJsFilename, isAgentRunning, postSnapshot } from '@percy/agent'
+import { doesNotReject } from 'assert';
 
 declare var PercyAgent: any;
 
@@ -21,9 +22,26 @@ export function percySnapshot(name: string, options: any = {}) {
   return function (nightmare: any) {
     nightmare
       .inject('js', agentJsFilename())
-      .evaluate(function (name: string, options: any, clientInfo: string) {
-        const percyAgentClient = new PercyAgent({clientInfo})
-        percyAgentClient.snapshot(name, options)
+      .evaluate(function (name: string, options: any = {}, clientInfo: string) {
+        const percyAgentClient = new PercyAgent({ handleAgentCommunication: false })
+        return {
+          domSnapshot: percyAgentClient.snapshot('unused'),
+          url: document.URL,
+          name,
+          options,
+          clientInfo
+          }
       }, name, options, clientInfo())
+      .then(function (result: any) {
+        //console.log('#### result: ' + JSON.stringify(result))
+        //console.log('### about to post snapshot')
+        return postSnapshot({
+          name: result['name'],
+          url: result['url'],
+          domSnapshot: result['domSnapshot'],
+          clientInfo: result['clientInfo'],
+          ...result['options']
+        })
+      })
   }
 }
