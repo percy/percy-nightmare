@@ -2,6 +2,7 @@ const httpServer = require('http-server')
 const should = require('chai').should()
 const Nightmare = require('nightmare')
 const { percySnapshot } = require('../dist')
+const { agentJsFilename, postSnapshot } = require('@percy/agent')
 
 describe('@percy/nightmare SDK', function() {
   this.timeout('10s')
@@ -40,7 +41,7 @@ describe('@percy/nightmare SDK', function() {
     nightmare.end(done)
   })
 
-  describe('with local app', function() {
+  xdescribe('with local app', function() {
     beforeEach(function(done) {
       nightmare
         .goto(TEST_URL)
@@ -108,6 +109,27 @@ describe('@percy/nightmare SDK', function() {
         .goto('https://buildkite.com/')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
         .then(() => done())
+    })
+
+    it('csp poc test', function (done) {
+      nightmare
+        .goto('https://www.google.com')
+        .inject('js', agentJsFilename())
+        .evaluate(function () {
+          const percyAgentClient = new PercyAgent({ handleAgentCommunication: false })
+          return percyAgentClient.snapshot('unused')
+        })
+        .then(function (domSnapshot) {
+          //console.log('#### domSnapshot: ' + domSnapshot)
+          return postSnapshot({
+            name: 'test poc snapshot name',
+            url: 'https://www.google.com',
+            domSnapshot,
+            clientInfo: 'poc-test'
+          })
+        })
+        .then(() => done())
+        .catch(done)
     })
   })
 })
