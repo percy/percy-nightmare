@@ -2,13 +2,6 @@ const httpServer = require('http-server')
 const should = require('chai').should()
 const Nightmare = require('nightmare')
 const { percySnapshot } = require('../dist')
-const { agentJsFilename, postSnapshot } = require('@percy/agent')
-
-Nightmare.action('percySnapshot', function(name, done) {
-  this.evaluate_now(function() {
-    return {url: document.URL, name}
-  }, done)
-})
 
 describe('@percy/nightmare SDK', function() {
   this.timeout('10s')
@@ -47,7 +40,7 @@ describe('@percy/nightmare SDK', function() {
     nightmare.end(done)
   })
 
- describe('with local app', function() {
+  describe('with local app', function() {
     beforeEach(function(done) {
       nightmare
         .goto(TEST_URL)
@@ -56,9 +49,7 @@ describe('@percy/nightmare SDK', function() {
     })
 
     it('snapshots with provided name', function(done) {
-      nightmare
-        .use(percySnapshot(this.test.fullTitle(), {}, done))
-        .then(() => done())
+      nightmare.use(percySnapshot(this.test.fullTitle())).then(() => done())
     })
 
     it('snapshots with provided name and widths', function(done) {
@@ -96,7 +87,7 @@ describe('@percy/nightmare SDK', function() {
 
     it('snapshots HTTPS website with no CSP', function(done) {
       nightmare
-        .goto('https://www.google.com')
+        .goto('https://www.google.com/')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
         .then(() => done())
     })
