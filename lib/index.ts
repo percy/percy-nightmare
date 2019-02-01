@@ -27,7 +27,7 @@ export function percySnapshot(name: string, options: any = {}) {
             if (isRunning) {
               return _post_snapshot(nightmare, name, options, clientInfo())
             } else {
-              console.log('[percy] agent not running -- skipping snapshots')
+              // Percy Agent not running -- skipping snapshots
               return Promise.resolve(true)
             }
           })
