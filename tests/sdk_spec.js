@@ -92,18 +92,14 @@ describe('@percy/nightmare SDK', function() {
         .then(() => done())
     })
 
-    // As of December 2018, it doesn't seem possible to bypass CSP in Nightmare.
-    // See https://github.com/segmentio/nightmare/issues/889 for details.
-    // As a consequence, Percy can't take snapshots in Nightmare of live sites with CSP.
-    // So the two test cases below do nothing, and are thus disabled.
-    xit('snapshots HTTPS website with CSP', function(done) {
+    it('snapshots HTTPS website with CSP', function(done) {
       nightmare
         .goto('https://polaris.shopify.com/')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
         .then(() => done())
     })
 
-    xit('snapshots site with strict CSP', function(done) {
+    it('snapshots site with strict CSP', function(done) {
       nightmare
         .goto('https://buildkite.com/')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
