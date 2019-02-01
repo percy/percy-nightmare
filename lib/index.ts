@@ -23,9 +23,9 @@ export function percySnapshot(name: string, options: any = {}) {
       .inject('js', agentJsFilename())
       .queue(function (done: any) {
         isAgentRunning()
-          .then(function(isRunning) {
+          .then(function(isRunning: boolean) {
             if (isRunning) {
-              return _promise_evaluate_now(nightmare, name, options, clientInfo())
+              return _post_snapshot(nightmare, name, options, clientInfo())
             } else {
               console.log('[percy] agent not running -- skipping snapshots')
               return Promise.resolve(true)
@@ -37,9 +37,12 @@ export function percySnapshot(name: string, options: any = {}) {
   }
 }
 
-// Turn our call to nightmare.evaluate_now(...) into a Promise, for readability and ease of chaining.
-function _promise_evaluate_now(nightmare: any, name: string, options: any, clientInfo: string) {
+function _post_snapshot(nightmare: any, name: string, options: any, clientInfo: string) {
+  // Turn call to nightmare.evaluate_now(...) into a Promise, for ease of chaining.
   return new Promise(function (resolve, reject) {
+    // Use evaluate_now instead of evaluate because it allows us to pass a callback and retrieve
+    // the result without having to call .then(...) or .run(...), which would initiate running the
+    // entire Nightmare chain.
     nightmare.evaluate_now(function (name: string, options: any = {}, clientInfo: string) {
       const percyAgentClient = new PercyAgent({ handleAgentCommunication: false })
       return {
@@ -50,9 +53,7 @@ function _promise_evaluate_now(nightmare: any, name: string, options: any, clien
         clientInfo
       }
     }, function (err: any, result: any) {
-      if (err) {
-        return reject(err)
-      }
+      if (err) return reject(err)
       return postSnapshot({
         name: result['name'],
         url: result['url'],
