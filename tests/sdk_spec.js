@@ -4,6 +4,12 @@ const Nightmare = require('nightmare')
 const { percySnapshot } = require('../dist')
 const { agentJsFilename, postSnapshot } = require('@percy/agent')
 
+Nightmare.action('percySnapshot', function(name, done) {
+  this.evaluate_now(function() {
+    return {url: document.URL, name}
+  }, done)
+})
+
 describe('@percy/nightmare SDK', function() {
   this.timeout('10s')
 
@@ -41,7 +47,7 @@ describe('@percy/nightmare SDK', function() {
     nightmare.end(done)
   })
 
-  xdescribe('with local app', function() {
+ describe('with local app', function() {
     beforeEach(function(done) {
       nightmare
         .goto(TEST_URL)
@@ -50,7 +56,9 @@ describe('@percy/nightmare SDK', function() {
     })
 
     it('snapshots with provided name', function(done) {
-      nightmare.use(percySnapshot(this.test.fullTitle())).then(() => done())
+      nightmare
+        .use(percySnapshot(this.test.fullTitle(), {}, done))
+        .then(() => done())
     })
 
     it('snapshots with provided name and widths', function(done) {
@@ -86,54 +94,25 @@ describe('@percy/nightmare SDK', function() {
 
   describe('with live sites', function() {
 
-    xit('snapshots HTTPS website with no CSP', function(done) {
+    it('snapshots HTTPS website with no CSP', function(done) {
       nightmare
         .goto('https://www.google.com')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
-        .catch(done)
         .then(() => done())
-        //.then(() => done())
     })
 
-    // As of December 2018, it doesn't seem possible to bypass CSP in Nightmare.
-    // See https://github.com/segmentio/nightmare/issues/889 for details.
-    // As a consequence, Percy can't take snapshots in Nightmare of live sites with CSP.
-    // So the two test cases below do nothing, and are thus disabled.
-    xit('snapshots HTTPS website with CSP', function(done) {
+    it('snapshots HTTPS website with CSP', function(done) {
       nightmare
         .goto('https://polaris.shopify.com/')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
         .then(() => done())
     })
 
-    xit('snapshots site with strict CSP', function(done) {
+    it('snapshots site with strict CSP', function(done) {
       nightmare
         .goto('https://buildkite.com/')
         .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
         .then(() => done())
-    })
-
-    it('csp poc test', function (done) {
-      nightmare
-        .goto('https://buildkite.com/')
-        .inject('js', agentJsFilename())
-        .evaluate(function () {
-          const percyAgentClient = new PercyAgent({ handleAgentCommunication: false })
-          return { domSnapshot: percyAgentClient.snapshot('unused'), url: document.URL }
-        })
-        .then(function (result) {
-          //console.log('### result: ' + JSON.stringify(result))
-          //console.log('### url:' + result['url'])
-          //console.log('#### domSnapshot: ' + domSnapshot)
-          return postSnapshot({
-            name: 'test poc snapshot name',
-            url: result['url'],
-            domSnapshot: result['domSnapshot'],
-            clientInfo: 'poc-test'
-          })
-        })
-        .then(() => done())
-        .catch(done)
     })
   })
 })
