@@ -6,8 +6,6 @@ echo "Enter the version you'd like to release:"
 
 read version
 
-npm install
-npm run build
 npm version $version
 git push origin master
 git push --tags
