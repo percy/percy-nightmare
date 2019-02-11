@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "npm run build && mocha tests/*spec.js",
-    "snapshots": "percy exec -- npm run test",
+    "pretest": "npm run build",
+    "test": "percy exec -- mocha tests/*spec.js",
     "prepublishOnly": "npm run build",
     "build": "tsc"
   },
