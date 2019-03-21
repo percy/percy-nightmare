@@ -7,6 +7,7 @@
   "scripts": {
     "pretest": "npm run build",
     "test": "percy exec -- mocha tests/*spec.js",
+    "test-win": "percy exec -- mocha.cmd tests/*spec.js",
     "prepublishOnly": "npm run build",
     "build": "tsc"
   },
