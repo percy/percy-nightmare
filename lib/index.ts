@@ -1,5 +1,5 @@
 import { clientInfo } from './environment'
-import { agentJsFilename, isAgentRunning, postSnapshot } from '@percy/agent'
+let { agentJsFilename, isAgentRunning, postSnapshot } = require('@percy/agent/dist/utils/sdk-utils')
 
 declare var PercyAgent: any;
 
