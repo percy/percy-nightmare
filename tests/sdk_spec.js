@@ -84,25 +84,17 @@ describe('@percy/nightmare SDK', function() {
   })
 
   describe('with live sites', function() {
-
-    it('snapshots HTTPS website with no CSP', function(done) {
+    it('snapshots a website with HTTP', function(done) {
       nightmare
-        .goto('https://www.google.com/')
-        .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
+        .goto('http://example.com/')
+        .use(percySnapshot(this.test.fullTitle()))
         .then(() => done())
     })
 
-    it('snapshots HTTPS website with CSP', function(done) {
+    it('snapshots a website with HTTPS, strict CSP, CORS and HSTS setup', function(done) {
       nightmare
-        .goto('https://polaris.shopify.com/')
-        .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
-        .then(() => done())
-    })
-
-    it('snapshots site with strict CSP', function(done) {
-      nightmare
-        .goto('https://buildkite.com/')
-        .use(percySnapshot(this.test.fullTitle(), { widths: [768, 992, 1200] }))
+        .goto('https://sdk-test.percy.dev')
+        .use(percySnapshot(this.test.fullTitle()))
         .then(() => done())
     })
   })
