@@ -64,6 +64,14 @@ describe('@percy/nightmare SDK', function() {
         .then(() => done())
     })
 
+    it('snapshots with provided name and percyCSS', function(done) {
+      nightmare
+        .use(percySnapshot(this.test.fullTitle(), {
+          percyCSS: `body { background-color: purple; }`
+        }))
+        .then(() => done())
+    })
+
     it('takes multiple snapshots in one test', function(done) {
       nightmare
         .type('.new-todo', 'A thing to accomplish')
