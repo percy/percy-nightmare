@@ -46,7 +46,7 @@ function _post_snapshot(nightmare: any, name: string, options: any, clientInfo: 
     nightmare.evaluate_now(function (name: string, options: any = {}, clientInfo: string) {
       const percyAgentClient = new PercyAgent({ handleAgentCommunication: false })
       return {
-        domSnapshot: percyAgentClient.snapshot('unused'),
+        domSnapshot: percyAgentClient.snapshot(name, options),
         url: document.URL,
         name,
         options,
