@@ -5,10 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "pretest": "npm run build",
+    "pretest": "yarn build",
     "test": "percy exec -- mocha tests/*spec.js",
-    "test-win": "npm run pretest && percy exec -- mocha.cmd tests/*spec.js",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "yarn build",
     "build": "tsc"
   },
   "repository": {
@@ -21,6 +20,9 @@
   ],
   "engines": {
     "node": ">=8.0.0"
+  },
+  "resolutions": {
+    "ecstatic": "3.2.2"
   },
   "author": "Perceptual Inc.",
   "license": "MIT",
