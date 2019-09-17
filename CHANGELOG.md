@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/percy/percy-nightmare/compare/v1.0.3...v1.0.4) (2019-09-17)
+
+
+### Bug Fixes
+
+* Pass snapshot options to agent DOM ([#101](https://github.com/percy/percy-nightmare/issues/101)) ([dfbe644](https://github.com/percy/percy-nightmare/commit/dfbe644))
+
 ## [1.0.3](https://github.com/percy/percy-nightmare/compare/v1.0.2...v1.0.3) (2019-05-01)
 
 
