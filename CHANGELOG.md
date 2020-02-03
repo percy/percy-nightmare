@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/percy/percy-nightmare/compare/v1.0.4...v1.1.0) (2020-02-03)
+
+
+### Features
+
+* Use node v10 ([#125](https://github.com/percy/percy-nightmare/issues/125)) ([c084e7d](https://github.com/percy/percy-nightmare/commit/c084e7d))
+
 ## [1.0.4](https://github.com/percy/percy-nightmare/compare/v1.0.3...v1.0.4) (2019-09-17)
 
 
