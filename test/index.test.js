@@ -17,7 +17,8 @@ describe('percySnapshot', () => {
     await nightmare.end();
   });
 
-  beforeEach(async () => {
+  beforeEach(async function() {
+    this.timeout(0);
     await sdk.setup();
     await nightmare.goto('http://localhost:8000');
   });
