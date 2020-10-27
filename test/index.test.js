@@ -3,11 +3,24 @@ const Nightmare = require('nightmare');
 const sdk = require('@percy/sdk-utils/test/helper');
 const percySnapshot = require('..');
 
+// xvfb wrapper
+const xvfb = {
+  start: () => new Promise(resolve => {
+    xvfb.instance = new (require('xvfb'))();
+    xvfb.instance.start(() => resolve());
+  }),
+
+  stop: () => new Promise(resolve => {
+    xvfb.instance.stop(() => resolve());
+  })
+};
+
 describe('percySnapshot', () => {
   let nightmare;
 
   before(async function() {
     this.timeout(0);
+    await xvfb.start();
     nightmare = new Nightmare();
     await sdk.testsite.mock();
   });
@@ -15,6 +28,7 @@ describe('percySnapshot', () => {
   after(async () => {
     await sdk.testsite.close();
     await nightmare.end();
+    await xvfb.stop();
   });
 
   beforeEach(async function() {
