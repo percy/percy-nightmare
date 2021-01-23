@@ -18,6 +18,7 @@ module.exports = function percySnapshot(name, options) {
 
     nightmare.queue(async done => {
       if (!(await utils.isPercyEnabled())) return done();
+      let log = utils.logger('nightmare');
 
       try {
         // Inject the DOM serialization script
@@ -43,8 +44,8 @@ module.exports = function percySnapshot(name, options) {
         });
       } catch (error) {
         // Handle errors
-        utils.log('error', `Could not take DOM snapshot "${name}"`);
-        utils.log('error', error);
+        log.error(`Could not take DOM snapshot "${name}"`);
+        log.error(error);
       }
 
       done();
