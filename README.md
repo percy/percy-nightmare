@@ -100,22 +100,13 @@ export.
 
 ```javascript
 // before
-const { percySnapshot } = require('@percy/nightmare);
+const { percySnapshot } = require('@percy/nightmare');
 
 // after
-const percySnapshot = require('@percy/nightmare);
+const percySnapshot = require('@percy/nightmare');
 ```
 
 #### Migrating Config
-
-If you have a previous Percy configuration file, migrate it to the newest version with the
-[`config:migrate`](https://github.com/percy/cli/tree/master/packages/cli-config#percy-configmigrate-filepath-output) command:
-
-```sh-session
-$ percy config:migrate
-```
-
-### Migrating Config
 
 If you have a previous Percy configuration file, migrate it to the newest version with the
 [`config:migrate`](https://github.com/percy/cli/tree/master/packages/cli-config#percy-configmigrate-filepath-output) command:
