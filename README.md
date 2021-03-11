@@ -7,16 +7,8 @@
 
 ## Installation
 
-Using yarn:
-
 ```sh-session
-$ yarn add --dev @percy/cli @percy/nightmare@next
-```
-
-Using npm:
-
-```sh-session
-$ npm install --save-dev @percy/cli @percy/nightmare@next
+$ npm install --save-dev @percy/cli @percy/nightmare
 ```
 
 ## Usage
@@ -75,22 +67,46 @@ $ percy exec -- node script.js
 
 ## Upgrading
 
-If you're coming from a pre-2.0 version of this package, make sure to install `@percy/cli` after
-upgrading to retain any existing scripts that reference the Percy CLI command.
+### Automatically with `@percy/migrate`
 
-Using yarn:
+We built a tool to help automate migrating to the new CLI toolchain! Migrating
+can be done by running the following commands and following the prompts:
 
-```sh-session
-$ yarn add --dev @percy/cli
+``` shell
+$ npx @percy/migrate
+? Are you currently using @percy/nightmare? Yes
+? Install @percy/cli (required to run percy)? Yes
+? Migrate Percy config file? Yes
+? Upgrade SDK to @percy/nightmare@2.0.0? Yes
 ```
 
-Using npm:
+This will automatically run the changes described below for you.
+
+### Manually
+
+#### Installing `@percy/cli`
+
+If you're coming from a pre-2.0 version of this package, make sure to install `@percy/cli` after
+upgrading to retain any existing scripts that reference the Percy CLI command.
 
 ```sh-session
 $ npm install --save-dev @percy/cli
 ```
 
-### Migrating Config
+#### Import change
+
+If you're coming from a pre-2.0 version of this package, the `percySnapshot` function is now the default
+export.
+
+```javascript
+// before
+const { percySnapshot } = require('@percy/nightmare');
+
+// after
+const percySnapshot = require('@percy/nightmare');
+```
+
+#### Migrating Config
 
 If you have a previous Percy configuration file, migrate it to the newest version with the
 [`config:migrate`](https://github.com/percy/cli/tree/master/packages/cli-config#percy-configmigrate-filepath-output) command:
