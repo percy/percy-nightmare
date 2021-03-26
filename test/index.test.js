@@ -1,6 +1,6 @@
 const expect = require('expect');
 const Nightmare = require('nightmare');
-const sdk = require('@percy/sdk-utils/test/helper');
+const helpers = require('@percy/sdk-utils/test/helpers');
 const percySnapshot = require('..');
 
 // xvfb wrapper
@@ -22,23 +22,23 @@ describe('percySnapshot', () => {
     this.timeout(0);
     await xvfb.start();
     nightmare = new Nightmare();
-    await sdk.testsite.mock();
+    await helpers.mockSite();
   });
 
   after(async () => {
-    await sdk.testsite.close();
+    await helpers.closeSite();
     await nightmare.end();
     await xvfb.stop();
   });
 
   beforeEach(async function() {
     this.timeout(0);
-    await sdk.setup();
+    await helpers.setup();
     await nightmare.goto('http://localhost:8000');
   });
 
   afterEach(async () => {
-    await sdk.teardown();
+    await helpers.teardown();
   });
 
   it('throws an error when a name is not provided', () => {
@@ -47,19 +47,19 @@ describe('percySnapshot', () => {
   });
 
   it('disables snapshots when the healthcheck fails', async () => {
-    sdk.test.failure('/percy/healthcheck');
+    await helpers.testFailure('/percy/healthcheck');
 
     await nightmare
       .use(percySnapshot('Snapshot 1'))
       .use(percySnapshot('Snapshot 2'));
 
-    expect(sdk.server.requests).toEqual([
+    await expect(helpers.getRequests()).resolves.toEqual([
       ['/percy/healthcheck']
     ]);
 
-    expect(sdk.logger.stderr).toEqual([]);
-    expect(sdk.logger.stdout).toEqual([
-      '[percy] Percy is not running, disabling snapshots\n'
+    expect(helpers.logger.stderr).toEqual([]);
+    expect(helpers.logger.stdout).toEqual([
+      '[percy] Percy is not running, disabling snapshots'
     ]);
   });
 
@@ -68,7 +68,7 @@ describe('percySnapshot', () => {
       .use(percySnapshot('Snapshot 1'))
       .use(percySnapshot('Snapshot 2'));
 
-    expect(sdk.server.requests).toEqual([
+    await expect(helpers.getRequests()).resolves.toEqual([
       ['/percy/healthcheck'],
       ['/percy/dom.js'],
       ['/percy/snapshot', {
@@ -83,35 +83,35 @@ describe('percySnapshot', () => {
       })]
     ]);
 
-    expect(sdk.logger.stdout).toEqual([]);
-    expect(sdk.logger.stderr).toEqual([]);
+    expect(helpers.logger.stdout).toEqual([]);
+    expect(helpers.logger.stderr).toEqual([]);
   });
 
   it('handles snapshot failures', async () => {
-    sdk.test.failure('/percy/snapshot', 'failure');
+    await helpers.testFailure('/percy/snapshot', 'failure');
 
     await nightmare
       .use(percySnapshot('Snapshot 1'));
 
-    expect(sdk.logger.stdout).toEqual([]);
-    expect(sdk.logger.stderr).toEqual([
-      '[percy] Could not take DOM snapshot "Snapshot 1"\n',
-      '[percy] Error: failure\n'
+    expect(helpers.logger.stdout).toEqual([]);
+    expect(helpers.logger.stderr).toEqual([
+      '[percy] Could not take DOM snapshot "Snapshot 1"',
+      '[percy] Error: failure'
     ]);
   });
 
   it('handles eval errors', async () => {
-    sdk.serializeDOM = () => {
+    await helpers.testSerialize(() => {
       throw new Error('serialize error');
-    };
+    });
 
     await nightmare
       .use(percySnapshot('Snapshot 1'));
 
-    expect(sdk.logger.stdout).toEqual([]);
-    expect(sdk.logger.stderr).toEqual([
-      '[percy] Could not take DOM snapshot "Snapshot 1"\n',
-      '[percy] Error: serialize error\n'
+    expect(helpers.logger.stdout).toEqual([]);
+    expect(helpers.logger.stderr).toEqual([
+      '[percy] Could not take DOM snapshot "Snapshot 1"',
+      '[percy] Error: serialize error'
     ]);
   });
 });
