@@ -1,7 +1,7 @@
 const expect = require('expect');
 const Nightmare = require('nightmare');
-const helpers = require('@percy/sdk-utils/test/helpers');
 const percySnapshot = require('..');
+let helpers;
 
 // xvfb wrapper
 const xvfb = {
@@ -19,6 +19,7 @@ describe('percySnapshot', () => {
   let nightmare;
 
   before(async function() {
+    ({ default: helpers } = await import('@percy/sdk-utils/test/helpers'));
     this.timeout(0);
     await xvfb.start();
     nightmare = new Nightmare();
