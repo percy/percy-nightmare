@@ -1,5 +1,3 @@
-const utils = require('@percy/sdk-utils');
-
 // Collect client and environment information
 const sdkPkg = require('./package.json');
 const nightmarePkg = require('nightmare/package.json');
@@ -17,6 +15,8 @@ module.exports = function percySnapshot(name, options) {
     });
 
     nightmare.queue(async done => {
+      let utils = await import('@percy/sdk-utils');
+
       if (!(await utils.isPercyEnabled())) return done();
       let log = utils.logger('nightmare');
 
