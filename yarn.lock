@@ -328,9 +328,9 @@
   integrity sha512-Sg67QklLHM7oTv80RH2PovV4Ps0mjiRrLYzxbsAvDopn73alPvy5uWHtJAHnJc3EYCiBde43L1jOSsGCsOv0Tg==
 
 "@percy/sdk-utils@^1.0.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.8.0.tgz#8db2aefbb211747f8f622db6daf25b781464a308"
-  integrity sha512-ehyYs7L4MDmqjBAfTHA8wDGrsDHiPrJ5SwMA9g9tT06VUey1JJtjSK30VidoouZQm+Sus9r5lW/K73CQZc3lSg==
+  version "1.22.0"
+  resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.22.0.tgz#e6d8523c714dc78d1af5403415c44642fe237907"
+  integrity sha512-H2af9lRZy26XuAl9IraeZ7qcXVkowamkdawY35RA28DIBoZKAaitVjlCgQG5fPg4hMiUgLFMuMRf3IXWm5Jh3g==
 
 "@tsd/typescript@~4.9.3":
   version "4.9.4"
