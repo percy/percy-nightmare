@@ -390,9 +390,9 @@
   integrity sha1-aaI6OtKcrwCX8G7aWbNh7i8GOfY=
 
 "@types/nightmare@^2.10.4":
-  version "2.10.6"
-  resolved "https://registry.yarnpkg.com/@types/nightmare/-/nightmare-2.10.6.tgz#a3b6009a447a87ebc61897cd074ad1270cf34fe7"
-  integrity sha512-vzZoCZ4/XeE67xmAhha4mxaHjWQUUC/NqXBTF8E4nLWi1rcxqZNdhAHBjAt/Yk7R2om77HhLZGrLKrxIQn6SjQ==
+  version "2.10.7"
+  resolved "https://registry.yarnpkg.com/@types/nightmare/-/nightmare-2.10.7.tgz#7266bd5995b7634264536bb5742e39197d3e660c"
+  integrity sha512-7Kfi8qs4uD+36VJEX0NvmoiOuhQyAtSA3Lev9ta/cR3E+PlYF4/OUOPHhxCMeS1d9sev/b9JOPRcDXm9rS9/9g==
   dependencies:
     "@types/node" "*"
 
