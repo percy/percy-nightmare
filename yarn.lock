@@ -327,10 +327,10 @@
   resolved "https://registry.yarnpkg.com/@percy/logger/-/logger-1.10.2.tgz#06474daa41ccb15332eedbbc86c18aac81d9e761"
   integrity sha512-Sg67QklLHM7oTv80RH2PovV4Ps0mjiRrLYzxbsAvDopn73alPvy5uWHtJAHnJc3EYCiBde43L1jOSsGCsOv0Tg==
 
-"@percy/sdk-utils@^1.0.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.8.0.tgz#8db2aefbb211747f8f622db6daf25b781464a308"
-  integrity sha512-ehyYs7L4MDmqjBAfTHA8wDGrsDHiPrJ5SwMA9g9tT06VUey1JJtjSK30VidoouZQm+Sus9r5lW/K73CQZc3lSg==
+"@percy/sdk-utils@^1.30.7":
+  version "1.30.8"
+  resolved "https://registry.yarnpkg.com/@percy/sdk-utils/-/sdk-utils-1.30.8.tgz#798c27c8cdf2465e336446096b3b526b2abafb71"
+  integrity sha512-NkRZk4iJs3nEaUnurFDaO1tMWofE7AszSriDZ90eCmMTjYrUUxOpvQs/35qMKT4o+qVTkeHicBGPZ8RsnY55zw==
 
 "@tsd/typescript@~4.9.3":
   version "4.9.4"
