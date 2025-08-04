@@ -34,7 +34,7 @@
   "devDependencies": {
     "@percy/core": "^1.0.0",
     "@types/nightmare": "^2.10.4",
-    "cross-env": "^7.0.2",
+    "cross-env": "^10.0.0",
     "eslint": "^7.11.0",
     "eslint-config-standard": "^16.0.0",
     "eslint-plugin-import": "^2.22.1",
