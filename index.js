@@ -26,8 +26,7 @@ module.exports = function percySnapshot(name, options) {
         await nEval(new Function(await utils.fetchPercyDOM()));
 
         // Serialize and capture the DOM
-        const configOptions = utils.percy?.config?.snapshot || {};
-        const mergedOptions = { ...configOptions, ...options };
+        const mergedOptions = utils.mergeSnapshotOptions(options);
         /* istanbul ignore next: no instrumenting injected code */
         let { domSnapshot, url } = await nEval(options => ({
           /* eslint-disable-next-line no-undef */
