@@ -30,7 +30,8 @@
   },
   "resolutions": {
     "node-releases": "2.0.19",
-    "snyk-nodejs-lockfile-parser": "1.59.0"
+    "snyk-nodejs-lockfile-parser": "1.59.0",
+    "event-loop-spinner": "2.3.2"
   },
   "peerDependencies": {
     "nightmare": "~3"

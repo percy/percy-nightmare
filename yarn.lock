@@ -2015,10 +2015,10 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
-event-loop-spinner@^2.0.0, event-loop-spinner@^2.1.0:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/event-loop-spinner/-/event-loop-spinner-2.3.3.tgz#5730c7353e16dcc1cbf0cb485882906d27429332"
-  integrity sha512-1mFCR39pkNh0agtlKPXVOBM5Bq2qOC5Pz+wlqizcKPKq2XTreVGDgWBi+Iyb4mdA5nF+oLd6oqePI9AZ2K7xMw==
+event-loop-spinner@2.3.2, event-loop-spinner@^2.0.0, event-loop-spinner@^2.1.0:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/event-loop-spinner/-/event-loop-spinner-2.3.2.tgz#cbf92985dccf8ce52c8905b33b8ac909c33f5605"
+  integrity sha512-O078Lkxi/yZEPPifcizDOGUeK1OFOlPC6sfCCrx10odvqX3tEi9XLaIRt9cIl9TBFcPZzuMaXbJ0b+T6D2Tnjg==
   dependencies:
     tslib "^2.6.3"
 
