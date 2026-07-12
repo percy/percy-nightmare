@@ -33,7 +33,7 @@ module.exports = function percySnapshot(name, options) {
       let log = utils.logger('nightmare');
 
       // Refuse a non-loopback Percy server address before fetching/executing the
-      // PercyDOM bundle from it (the new Function below) — PER-8708 / PER-8717.
+      // PercyDOM bundle from it (the new Function below).
       if (utils.percy.address && !isLoopbackAddress(utils.percy.address)) {
         log.error(`Refusing non-loopback PERCY_SERVER_ADDRESS "${utils.percy.address}"; the Percy CLI must run on localhost.`);
         return done();
