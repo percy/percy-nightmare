@@ -18,6 +18,9 @@ jobs:
         os: [ubuntu-latest]
         node: [14]
     runs-on: ${{ matrix.os }}
+    # Fail fast instead of hanging until GitHub's 6h ceiling if Electron/Nightmare
+    # never comes up on the runner.
+    timeout-minutes: 20
     steps:
       - uses: actions-ecosystem/action-regex-match@9e6c4fb3d5e898f505be7a1fb6e7b0a278f6665b # v2.0.2
         id: regex-match
@@ -58,4 +61,8 @@ jobs:
           cd "$WORKSPACE"
           yarn remove @percy/cli && yarn link `echo $PERCY_PACKAGES`
           npx percy --version
+      # Nightmare bundles Electron, which needs a virtual display (Xvfb, started
+      # in-test) plus these shared libraries to launch headless on the runner.
+      - name: Install Electron runtime libraries
+        run: sudo apt-get update && sudo apt-get install -y xvfb libgbm1 libgtk-3-0 libnss3 libasound2 libxss1 libxtst6
       - run: yarn test:coverage

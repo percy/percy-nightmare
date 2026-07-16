@@ -20,9 +20,12 @@ describe('percySnapshot', () => {
 
   before(async function() {
     ({ default: helpers } = await import('@percy/sdk-utils/test/helpers'));
-    this.timeout(0);
+    this.timeout(120000);
     await xvfb.start();
-    nightmare = new Nightmare();
+    // Electron's sandbox relies on unprivileged user namespaces, which are
+    // restricted on modern CI runners; without --no-sandbox the child never
+    // comes up and the suite hangs.
+    nightmare = new Nightmare({ switches: { 'no-sandbox': true } });
     await helpers.mockSite();
   });
 
@@ -33,7 +36,7 @@ describe('percySnapshot', () => {
   });
 
   beforeEach(async function() {
-    this.timeout(0);
+    this.timeout(120000);
     await helpers.setup();
     await nightmare.goto('http://localhost:8000');
   });
