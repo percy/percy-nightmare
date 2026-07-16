@@ -15,7 +15,9 @@ jobs:
     name: Test
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        # Pin to 22.04: Nightmare's bundled (old) Electron/Chromium does not come
+        # up on ubuntu-latest (24.04), which is why the renderer hung on goto.
+        os: [ubuntu-22.04]
         node: [14]
     runs-on: ${{ matrix.os }}
     # Fail fast instead of hanging until GitHub's 6h ceiling if Electron/Nightmare
