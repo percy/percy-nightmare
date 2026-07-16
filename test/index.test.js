@@ -20,9 +20,19 @@ describe('percySnapshot', () => {
 
   before(async function() {
     ({ default: helpers } = await import('@percy/sdk-utils/test/helpers'));
-    this.timeout(0);
+    this.timeout(120000);
     await xvfb.start();
-    nightmare = new Nightmare();
+    // CI runner switches for headless Electron: --no-sandbox (unprivileged user
+    // namespaces are restricted on modern runners), and --disable-gpu /
+    // --disable-dev-shm-usage so the renderer comes up on a headless box with a
+    // tiny /dev/shm instead of hanging on navigation.
+    nightmare = new Nightmare({
+      switches: {
+        'no-sandbox': true,
+        'disable-gpu': true,
+        'disable-dev-shm-usage': true
+      }
+    });
     await helpers.mockSite();
   });
 
@@ -33,7 +43,7 @@ describe('percySnapshot', () => {
   });
 
   beforeEach(async function() {
-    this.timeout(0);
+    this.timeout(120000);
     await helpers.setup();
     await nightmare.goto('http://localhost:8000');
   });

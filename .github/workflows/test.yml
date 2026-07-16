@@ -7,16 +7,27 @@ on:
         required: false
         type: string
         default: master
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Test
     strategy:
       matrix:
+        # Keep the matrix value 'ubuntu-latest' so the generated check name stays
+        # "Test (ubuntu-latest, 14)" — the branch-protection required context.
+        # The actual runner is pinned below; this label does not drive runs-on.
         os: [ubuntu-latest]
         node: [14]
-    runs-on: ${{ matrix.os }}
+    # Pin the real runner to 22.04: Nightmare's bundled (old) Electron/Chromium
+    # does not render on ubuntu-latest (24.04) and the renderer hung on goto.
+    runs-on: ubuntu-22.04
+    # Fail fast instead of hanging until GitHub's 6h ceiling if Electron/Nightmare
+    # never comes up on the runner.
+    timeout-minutes: 20
     steps:
-      - uses: actions-ecosystem/action-regex-match@v2
+      - uses: actions-ecosystem/action-regex-match@9e6c4fb3d5e898f505be7a1fb6e7b0a278f6665b # v2.0.2
         id: regex-match
         if: ${{ github.event_name == 'workflow_dispatch' }}
         with:
@@ -25,14 +36,14 @@ jobs:
       - name: Break on invalid branch name
         run: exit 1
         if: ${{ github.event_name == 'workflow_dispatch' && steps.regex-match.outputs && steps.regex-match.outputs.match == '' }}
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: ${{ matrix.node }}
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v3
+      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: v1/${{ runner.os }}/node-${{ matrix.node }}/${{ hashFiles('**/yarn.lock') }}
@@ -40,16 +51,29 @@ jobs:
       - run: yarn
       - name: Set up @percy/cli from git
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          CLI_BRANCH: ${{ github.event.inputs.branch }}
+          WORKSPACE: ${{ github.workspace }}
         run: |
           cd /tmp
-          git clone --branch ${{ github.event.inputs.branch }} --depth 1 https://github.com/percy/cli
+          git clone --branch "$CLI_BRANCH" --depth 1 https://github.com/percy/cli
           cd cli
           PERCY_PACKAGES=`find packages -mindepth 1 -maxdepth 1 -type d | sed -e 's/packages/@percy/g' | tr '\n' ' '`
           git log -1
           yarn
           yarn build
           yarn global:link
-          cd ${{ github.workspace }} 
+          cd "$WORKSPACE"
           yarn remove @percy/cli && yarn link `echo $PERCY_PACKAGES`
           npx percy --version
+      # Nightmare bundles Electron, which needs a virtual display (Xvfb, started
+      # in-test) plus these shared libraries to launch headless on the runner.
+      # libasound2 / libgtk-3-0 were renamed with a t64 suffix in Ubuntu 24.04's
+      # time64 transition, so try the new name and fall back to the old one.
+      - name: Install Electron runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgbm1 libnss3 libxss1 libxtst6
+          sudo apt-get install -y libgtk-3-0t64 || sudo apt-get install -y libgtk-3-0
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2
       - run: yarn test:coverage
