@@ -15,11 +15,14 @@ jobs:
     name: Test
     strategy:
       matrix:
-        # Pin to 22.04: Nightmare's bundled (old) Electron/Chromium does not come
-        # up on ubuntu-latest (24.04), which is why the renderer hung on goto.
-        os: [ubuntu-22.04]
+        # Keep the matrix value 'ubuntu-latest' so the generated check name stays
+        # "Test (ubuntu-latest, 14)" — the branch-protection required context.
+        # The actual runner is pinned below; this label does not drive runs-on.
+        os: [ubuntu-latest]
         node: [14]
-    runs-on: ${{ matrix.os }}
+    # Pin the real runner to 22.04: Nightmare's bundled (old) Electron/Chromium
+    # does not render on ubuntu-latest (24.04) and the renderer hung on goto.
+    runs-on: ubuntu-22.04
     # Fail fast instead of hanging until GitHub's 6h ceiling if Electron/Nightmare
     # never comes up on the runner.
     timeout-minutes: 20
