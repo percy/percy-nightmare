@@ -22,10 +22,17 @@ describe('percySnapshot', () => {
     ({ default: helpers } = await import('@percy/sdk-utils/test/helpers'));
     this.timeout(120000);
     await xvfb.start();
-    // Electron's sandbox relies on unprivileged user namespaces, which are
-    // restricted on modern CI runners; without --no-sandbox the child never
-    // comes up and the suite hangs.
-    nightmare = new Nightmare({ switches: { 'no-sandbox': true } });
+    // CI runner switches for headless Electron: --no-sandbox (unprivileged user
+    // namespaces are restricted on modern runners), and --disable-gpu /
+    // --disable-dev-shm-usage so the renderer comes up on a headless box with a
+    // tiny /dev/shm instead of hanging on navigation.
+    nightmare = new Nightmare({
+      switches: {
+        'no-sandbox': true,
+        'disable-gpu': true,
+        'disable-dev-shm-usage': true
+      }
+    });
     await helpers.mockSite();
   });
 
